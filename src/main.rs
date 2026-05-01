@@ -1,9 +1,12 @@
 
+pub type NodePtr = Option<Box<ListNode>>;
+
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct ListNode {
     pub value: i32,
-    pub next:   Option<Box<ListNode>>,
+    pub next:  NodePtr,
 }
+
 
 impl ListNode {
     #[inline]
@@ -19,9 +22,9 @@ struct Solution;
 
 impl Solution {
     pub fn add_two_numbers(
-        l1: Option<Box<ListNode>>,
-        l2: Option<Box<ListNode>>
-    ) -> Option<Box<ListNode>> {
+        node_one: NodePtr,
+        node_two: NodePtr,
+    ) -> NodePtr {
         None
     }
 }
