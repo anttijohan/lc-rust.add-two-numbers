@@ -27,17 +27,17 @@ impl ListNode {
         }
     }
 
-    pub fn new_from_list(mut values: Vec<i32>) -> ListNode {
+    pub fn new_from_list(values: Vec<i32>) -> ListNode {
         if values.len() == 0 {
             return ListNode::new(0);
         }
 
         // Define the new ListNode
-        let mut base_list_node = ListNode::new(values.pop().unwrap());
+        let mut base_list_node = ListNode::new(values[0]);
 
         let mut current_list_node = &mut base_list_node;
 
-        for value_ref in values.iter().rev().take(Self::MAX_LINK_DEPTH) {
+        for value_ref in values.iter().skip(1).take(Self::MAX_LINK_DEPTH) {
             // Add new link
             current_list_node.next = Some(Box::new(ListNode::new(*value_ref)));
 
@@ -317,8 +317,6 @@ mod tests {
 
     #[test]
     fn add_two_numbers_example_2_test() {
-
-        //let listnode_one = ListNode::new_from_list(vec![0]);
         let listnode_one = ListNode::new_from_list(vec![0]);
         let listnode_two = ListNode::new_from_list(vec![0]);
 
