@@ -46,7 +46,7 @@ impl ListNode {
                 .as_mut()
                 .unwrap();
         }
-        
+
         base_list_node
     }
     pub fn to_vec(&self) -> Vec<i32> {
@@ -58,11 +58,49 @@ impl ListNode {
         }
     }
 
+    pub fn into_node_ptr(self) -> NodePtr {
+        Some(Box::new(self))
+    }
+
+    pub fn out_of_node_ptr(node_ptr: NodePtr) -> ListNode {
+        node_ptr.unwrap().as_ref().to_owned()
+    }
+
 
     pub fn print(&self) {
         for (index, value) in self.iter().enumerate() {
             println!("[{}] = {}", index, value);
         }
+    }
+
+    pub fn format(&self) -> String {
+        let count = self.iter().count();
+
+        println!("Iter count = {}", count);
+
+        //let mut result_string = String::new();
+        let mut numbers: Vec<char> = Vec::with_capacity(count);
+        let mut formatted_iterations: Vec<String> = Vec::with_capacity(count);
+
+        for (index, value) in self.iter().enumerate() {
+            let reverse_index = count - index - 1;
+            println!("Reverse index = {}", reverse_index);
+
+            formatted_iterations.push(format!("[{}] = {}", index, value));
+
+            let digit_as_byte = b'0' + value as u8;
+
+            numbers.push(digit_as_byte as char);
+        }
+
+        let mut result_string = formatted_iterations.into_iter().rev().collect::<String>();
+        // Remove the two last characters: comma and whitepace
+        //result_string.pop();
+        //result_string.pop();
+        let result_number = numbers.into_iter().rev().collect::<String>();
+        result_string.push_str(format!(": {}", result_number).as_str());
+
+        result_string
     }
 }
 
@@ -118,6 +156,9 @@ impl Solution {
         let vec_two_len = vec_two.len();
         let max_len = cmp::max(vec_one_len, vec_two_len);
 
+        println!("**********************");
+        println!("The steps of solution:\n");
+
         // Iterate over the max length of the two vectors,
         // and read the values of both vectors with the index.
         // `unwrap_or` takes care of the shorter vector's out-of-bounds
@@ -131,7 +172,7 @@ impl Solution {
             let mut value_sum = value_one + value_two + carry;
 
             println!(
-                "[{}] (a){} + (b){} + (carry){} = (sum){}",
+                "[{}] (a){} + (b){} + (carry){} = (sum){}\n",
                 index,
                 value_one,
                 value_two,
@@ -148,7 +189,7 @@ impl Solution {
                 carry      = value_sum / 10;
                 value_sum %= 10;
 
-                println!(" new carry = {}, carried sum {}", carry, value_sum);
+                println!(" new carry = {}, carried sum {}\n", carry, value_sum);
             } else {
 
                 if carry > 0 {
@@ -218,11 +259,24 @@ impl Solution {
 
 fn main() {
     let listnode_one = ListNode::new_from_list(vec![
-        1, 2, 3, 4, 5, 6, 7
+        5, 0, 5
     ]);
 
-    listnode_one.print();
-    //println!("Initial structure for solution is initialized");
+    let listnode_two = ListNode::new_from_list(vec![
+        6, 0, 5
+    ]);
+
+    println!("Sum of Listnode #1\n{:?}\n", listnode_one.format());
+    println!("And of Listnode #2\n{:?}\n", listnode_two.format());
+
+    let listnode_sum = Solution::add_two_numbers(
+        listnode_one.into_node_ptr(),
+        listnode_two.into_node_ptr()
+    );
+
+    println!("\nOutcome is: {:?}\n", ListNode::out_of_node_ptr(listnode_sum).format());
+
+
 }
 
 #[cfg(test)]
