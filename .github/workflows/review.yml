@@ -11,4 +11,4 @@ jobs:
       - name: Build binaries
         run:  cargo build --verbose
       - name: Run tests
-        run:  cargo test --verboseb
+        run:  cargo test --verbose
